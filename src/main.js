@@ -8,7 +8,8 @@ const input = document.querySelector(".input-search");
 const waitMsg = document.querySelector(".wait-msg");
 
 let currentPage = 1; 
-let searchTerm = ''; 
+let searchTerm = '';
+
 form.addEventListener("submit", (e) => {
     e.preventDefault();  
 
@@ -21,7 +22,7 @@ form.addEventListener("submit", (e) => {
         iziToast.show({
             backgroundColor: 'rgba(239, 64, 64, 1)',
             messageColor: `rgba(255, 255, 255, 1)`,
-            close: `true`,
+            close: true,
             position: "topRight",
             title: 'Error',
             titleColor: '#fff',
@@ -44,10 +45,10 @@ form.addEventListener("submit", (e) => {
 
 document.getElementById('loadMore').addEventListener('click', () => {
     currentPage++; 
-    fetchImages(searchTerm);
+    fetchImages(searchTerm, true); // передаємо true, щоб знати, що це "Load More"
 });
 
-function fetchImages(searchTerm) {
+function fetchImages(searchTerm, isLoadMore = false) {
     showLoadingIndicator(); 
     getImg(searchTerm, currentPage)
         .then(response => {
@@ -58,7 +59,7 @@ function fetchImages(searchTerm) {
                 iziToast.show({
                     backgroundColor: 'rgba(239, 64, 64, 1)',
                     messageColor: `rgba(255, 255, 255, 1)`,
-                    close: `true`,
+                    close: true,
                     position: "topRight",
                     title: 'Error',
                     titleColor: '#fff',
@@ -68,15 +69,52 @@ function fetchImages(searchTerm) {
                 toggleLoadMoreButton(false); 
             } else {
                 displayImages(images); 
-                toggleLoadMoreButton(currentPage * 40 < totalHits); 
+
+                if (currentPage * 40 >= totalHits) {
+                    iziToast.show({
+                        backgroundColor: 'rgba(255, 165, 0, 1)', 
+                        messageColor: '#fff',
+                        close: true,
+                        position: "topRight",
+                        title: 'Info',
+                        titleColor: '#fff',
+                        titleSize: '16px',
+                        message: 'You have reached the last page of results.'
+                    });
+                    toggleLoadMoreButton(false);
+                } else {
+                    toggleLoadMoreButton(true);
+                }
+
+                if (isLoadMore) {
+                    smoothScroll();
+                }
             }
             waitMsg.textContent = "";
         })
         .catch(error => {
-            waitMsg.textContent = 'Ups ...';
-            console.log(error);
+            waitMsg.textContent = "";
+            iziToast.show({
+                backgroundColor: 'rgba(239, 64, 64, 1)',
+                messageColor: '#fff',
+                close: true,
+                position: "topRight",
+                title: 'Error',
+                titleColor: '#fff',
+                titleSize: '16px',
+                message: 'Something went wrong! Please try again later.'
+            });
+            console.error(error);
         })
         .finally(() => {
             hideLoadingIndicator(); 
         });
+}
+
+function smoothScroll() {
+    const gallery = document.querySelector(".gallery");
+    if (gallery.children.length >= 2) {
+        const secondLastImage = gallery.children[gallery.children.length - 2]; 
+        secondLastImage.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 }
