@@ -45,7 +45,7 @@ form.addEventListener("submit", (e) => {
 
 document.getElementById('loadMore').addEventListener('click', () => {
     currentPage++; 
-    fetchImages(searchTerm, true); // передаємо true, щоб знати, що це "Load More"
+    fetchImages(searchTerm, true);
 });
 
 function fetchImages(searchTerm, isLoadMore = false) {

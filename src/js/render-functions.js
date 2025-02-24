@@ -36,6 +36,11 @@ export function displayImages(images) {
     ).join("");
 
     gallery.insertAdjacentHTML("beforeend", markup); 
+    const cardHeight = document.querySelector(".gallery-item").getBoundingClientRect().height;
+window.scrollBy({
+    top: cardHeight * 2,
+    behavior: "smooth"
+});
 
     lightbox.refresh();
 }
