@@ -106,6 +106,10 @@ main {
   }
 }
 
+.gallery a {
+  display: block;
+}
+
 .gallery {
   display: flex;
   flex-wrap: wrap;

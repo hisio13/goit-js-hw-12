@@ -34,6 +34,8 @@ export function displayImages(images) {
         </li>`
     ).join("");
 
+    lightbox.refresh();
+
     gallery.insertAdjacentHTML("beforeend", markup); 
     const cardHeight = document.querySelector(".gallery-item").getBoundingClientRect().height;
 window.scrollBy({
@@ -41,7 +43,6 @@ window.scrollBy({
     behavior: "smooth"
 });
 
-    lightbox.refresh();
 }
 
 export function clearGallery() {
