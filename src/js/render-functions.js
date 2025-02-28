@@ -4,12 +4,12 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 const lightbox = new SimpleLightbox(".gallery a", {
     captionsData: 'alt',
     captionDelay: 250,
-    close: 'true',
+    close: true,
 });
 
 export function displayImages(images) {
     const gallery = document.getElementById('gallery');
-    
+
     const markup = images.map(image => 
         `<li class="gallery-item">
             <a class='gallery-link' href="${image.largeImageURL}">
@@ -34,15 +34,19 @@ export function displayImages(images) {
         </li>`
     ).join("");
 
+    gallery.insertAdjacentHTML("beforeend", markup);
+
     lightbox.refresh();
 
-    gallery.insertAdjacentHTML("beforeend", markup); 
-    const cardHeight = document.querySelector(".gallery-item").getBoundingClientRect().height;
-window.scrollBy({
-    top: cardHeight * 2,
-    behavior: "smooth"
-});
-
+   
+    const firstGalleryItem = document.querySelector(".gallery-item");
+    if (firstGalleryItem) {
+        const cardHeight = firstGalleryItem.getBoundingClientRect().height;
+        window.scrollBy({
+            top: cardHeight * 2,
+            behavior: "smooth"
+        });
+    }
 }
 
 export function clearGallery() {
