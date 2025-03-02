@@ -48,6 +48,17 @@ document.getElementById('loadMore').addEventListener('click', () => {
     fetchImages(searchTerm, true);
 });
 
+function scrollToNextImages() {
+    const galleryItems = document.querySelectorAll(".gallery-item");
+    if (galleryItems.length >= 2) {
+        const cardHeight = galleryItems[0].getBoundingClientRect().height;
+        window.scrollBy({
+            top: cardHeight * 2,
+            behavior: "smooth"
+        });
+    }
+}
+
 function fetchImages(searchTerm, isLoadMore = false) {
     showLoadingIndicator(); 
     getImg(searchTerm, currentPage)
@@ -87,7 +98,7 @@ function fetchImages(searchTerm, isLoadMore = false) {
                 }
 
                 if (isLoadMore) {
-                    smoothScroll();
+                    scrollToNextImages();
                 }
             }
             waitMsg.textContent = "";
@@ -111,10 +122,3 @@ function fetchImages(searchTerm, isLoadMore = false) {
         });
 }
 
-function smoothScroll() {
-    const gallery = document.querySelector(".gallery");
-    if (gallery.children.length >= 2) {
-        const secondLastImage = gallery.children[gallery.children.length - 2]; 
-        secondLastImage.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-}

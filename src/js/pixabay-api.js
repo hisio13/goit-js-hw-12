@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const baseUrl = "https://pixabay.com";
-const endPoint = "/api";
+const endPoint = "/api/";
 
 export function getImg(searchName, page = 1, perPage = 40) {
     const params = new URLSearchParams({

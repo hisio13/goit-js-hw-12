@@ -35,18 +35,7 @@ export function displayImages(images) {
     ).join("");
 
     gallery.insertAdjacentHTML("beforeend", markup);
-
     lightbox.refresh();
-
-   
-    const firstGalleryItem = document.querySelector(".gallery-item");
-    if (firstGalleryItem) {
-        const cardHeight = firstGalleryItem.getBoundingClientRect().height;
-        window.scrollBy({
-            top: cardHeight * 2,
-            behavior: "smooth"
-        });
-    }
 }
 
 export function clearGallery() {
@@ -66,3 +55,16 @@ export function hideLoadingIndicator() {
 export function toggleLoadMoreButton(show) {
     document.getElementById('loadMore').style.display = show ? 'block' : 'none';
 }
+
+export function scrollToNextImages() {
+    const galleryItems = document.querySelectorAll(".gallery-item");
+    if (galleryItems.length >= 2) {
+        const cardHeight = galleryItems[0].getBoundingClientRect().height;
+        window.scrollBy({
+            top: cardHeight * 2,
+            behavior: "smooth"
+        });
+    }
+}
+
+document.getElementById('loadMore').addEventListener('click', scrollToNextImages);
